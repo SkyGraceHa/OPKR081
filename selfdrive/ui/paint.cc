@@ -482,28 +482,24 @@ static void ui_draw_debug(UIState *s)
     ui_print(s, ui_viz_rx, ui_viz_ry+400, "AD:%.2f", scene.pathPlan.steerActuatorDelay);
     ui_print(s, ui_viz_rx, ui_viz_ry+450, "SC:%.2f", scene.pathPlan.steerRateCost);
     ui_print(s, ui_viz_rx, ui_viz_ry+500, "OS:%.3f", scene.output_scale);
-    //ui_print(s, ui_viz_rx, ui_viz_ry+400, "Awareness:%.2f", scene.awareness_status);
-    //ui_print(s, ui_viz_rx, ui_viz_ry+470, "FaceProb:%.2f", scene.face_prob);
+    nvgFontSize(s->vg, 45);
+    nvgFillColor(s->vg, COLOR_YELLOW_ALPHA(200));
+    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (s->lateral_control == 0) {
-      ui_print(s, ui_viz_rx, ui_viz_ry+550, "LaC:PID");
+      ui_print(s, ui_viz_rx_center, ui_viz_ry+270, "PID");
     } else if (s->lateral_control == 1) {
-      ui_print(s, ui_viz_rx, ui_viz_ry+550, "LaC:INDI");
+      ui_print(s, ui_viz_rx_center, ui_viz_ry+270, "INDI");
     } else if (s->lateral_control == 2) {
-      ui_print(s, ui_viz_rx, ui_viz_ry+550, "LaC:LQR");
+      ui_print(s, ui_viz_rx_center, ui_viz_ry+270, "LQR");
     }
-    //ui_print(s, ui_viz_rx, ui_viz_ry+600, "SL:%.1f", scene.speedlimitahead*3.6);
     nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    //ui_print(s, ui_viz_rx_center, ui_viz_ry+650, "커브");
-    if (scene.curvature >= 0.001) {
-      ui_print(s, ui_viz_rx_center, ui_viz_ry+650, "↖%.4f　", abs(scene.curvature));
-    } else if (scene.curvature <= -0.001) {
-      ui_print(s, ui_viz_rx_center, ui_viz_ry+650, "　%.4f↗", abs(scene.curvature));
-    } else {
-      ui_print(s, ui_viz_rx_center, ui_viz_ry+650, "　%.4f　", abs(scene.curvature));
-    }
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+700, " 좌측간격(m)    차선폭(m)    우측간격(m)");
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+750, "%.2f                    %.2f                    %.2f", scene.pathPlan.lPoly, scene.pathPlan.laneWidth, abs(scene.pathPlan.rPoly));
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150)); 
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+750, "←좌측간격(%%)→    차선폭(m)    ←우측간격(%%)→");
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+800, "%4.1f                     %4.2f                    %4.1f", 
+                                                    (scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100, 
+                                                    scene.pathPlan.laneWidth, 
+                                                    (abs(scene.pathPlan.rPoly)/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100);
   }
 }
 
