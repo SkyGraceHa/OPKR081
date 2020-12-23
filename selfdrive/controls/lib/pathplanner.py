@@ -88,10 +88,10 @@ class PathPlanner():
 
     # self.angle_differ_range = [0, 45]
     # self.steerRatio_range = [CP.steerRatio, 16.5] # 가변 SR값 범위 설정
-    self.angle_range = [0, 50]
-    self.steerRatio_range = [12.5, CP.steerRatio] # 가변 SR값 범위 설정
-    self.new_steerRatio = 12.5 #CP.steerRatio
-    self.new_steerRatio_prev = 12.5 #CP.steerRatio
+    self.angle_range = [0, 40]
+    self.steerRatio_range = [13.5, CP.steerRatio] # 가변 SR값 범위 설정
+    self.new_steerRatio = 13.5 #CP.steerRatio
+    self.new_steerRatio_prev = 13.5 #CP.steerRatio
 
     self.steer_actuator_delay_range = [0.1, CP.steerActuatorDelay]
     self.steer_actuator_delay_vel = [3, 13]
@@ -162,7 +162,7 @@ class PathPlanner():
     x = max(sm['liveParameters'].stiffnessFactor, 0.1)
     
     if self.live_sr:
-      if angle_steers < 20:
+      if angle_steers < 10:
         sr = interp(angle_steers, self.angle_range, self.steerRatio_range)
       else:
         sr = max(sm['liveParameters'].steerRatio, 0.1) #Live SR
