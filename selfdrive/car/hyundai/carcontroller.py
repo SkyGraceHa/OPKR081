@@ -149,10 +149,14 @@ class CarController():
     self.scc_live = not CP.radarOffCan
     self.accActive = False
 
-    self.model_speed_range = [30, 90, 255, 300]
-    self.steerMax_range = [SteerLimitParams.STEER_MAX, int(self.params.get('SteerMaxBaseAdj')), int(self.params.get('SteerMaxBaseAdj')), 0]
-    self.steerDeltaUp_range = [5, int(self.params.get('SteerDeltaUpAdj')), int(self.params.get('SteerDeltaUpAdj')), 0]
-    self.steerDeltaDown_range = [10, int(self.params.get('SteerDeltaDownAdj')), int(self.params.get('SteerDeltaDownAdj')), 0]
+    # self.model_speed_range = [30, 90, 255, 300]
+    # self.steerMax_range = [SteerLimitParams.STEER_MAX, int(self.params.get('SteerMaxBaseAdj')), int(self.params.get('SteerMaxBaseAdj')), 0]
+    # self.steerDeltaUp_range = [5, int(self.params.get('SteerDeltaUpAdj')), int(self.params.get('SteerDeltaUpAdj')), 0]
+    # self.steerDeltaDown_range = [10, int(self.params.get('SteerDeltaDownAdj')), int(self.params.get('SteerDeltaDownAdj')), 0]
+    self.angle_range = [0, 5, 65]    
+    self.steerMax_range = [200, int(self.params.get('SteerMaxBaseAdj')), SteerLimitParams.STEER_MAX]
+    self.steerDeltaUp_range = [1, int(self.params.get('SteerDeltaUpAdj')), 5]
+    self.steerDeltaDown_range = [2, int(self.params.get('SteerDeltaDownAdj')), 10]
 
     self.steerMax = int(self.params.get('SteerMaxBaseAdj'))
     self.steerDeltaUp = int(self.params.get('SteerDeltaUpAdj'))
@@ -208,15 +212,19 @@ class CarController():
     path_plan = sm['pathPlan']
     self.outScale = path_plan.outputScale
     self.vCruiseSet = path_plan.vCruiseSet
+    self.angle_steers = CS.out.steeringAngle    
 
     if CS.out.vEgo > 8:
       if self.variable_steer_max:
-        self.steerMax = interp(int(abs(self.model_speed)), self.model_speed_range, self.steerMax_range)
+        # self.steerMax = interp(int(abs(self.model_speed)), self.model_speed_range, self.steerMax_range)
+        self.steerMax = interp(abs(self.angle_steers), self.angle_range, self.steerMax_range)     
       else:
         self.steerMax = int(self.params.get('SteerMaxBaseAdj'))
       if self.variable_steer_delta:
-        self.steerDeltaUp = interp(int(abs(self.model_speed)), self.model_speed_range, self.steerDeltaUp_range)
-        self.steerDeltaDown = interp(int(abs(self.model_speed)), self.model_speed_range, self.steerDeltaDown_range)
+        # self.steerDeltaUp = interp(int(abs(self.model_speed)), self.model_speed_range, self.steerDeltaUp_range)
+        # self.steerDeltaDown = interp(int(abs(self.model_speed)), self.model_speed_range, self.steerDeltaDown_range)
+        self.steerDeltaUp = interp(abs(self.angle_steers), self.angle_range, self.steerDeltaUp_range)
+        self.steerDeltaDown = interp(abs(self.angle_steers), self.angle_range, self.steerDeltaDown_range)
       else:
         self.steerDeltaUp = int(self.params.get('SteerDeltaUpAdj'))
         self.steerDeltaDown = int(self.params.get('SteerDeltaDownAdj'))
