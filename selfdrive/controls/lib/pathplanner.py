@@ -145,7 +145,7 @@ class PathPlanner():
 
     # 가변 SR
     if not self.live_sr:
-      self.angle_diff = abs(anglesteer_desire) - abs(anglesteer_current)
+      # self.angle_diff = abs(anglesteer_desire) - abs(anglesteer_current)
       if abs(output_scale) >= 1 and v_ego > 8:
         # self.new_steerRatio_prev = interp(self.angle_diff, self.angle_differ_range, self.steerRatio_range)
         self.new_steerRatio_prev = interp(angle_steers, self.angle_range, self.steerRatio_range)
@@ -162,10 +162,7 @@ class PathPlanner():
     x = max(sm['liveParameters'].stiffnessFactor, 0.1)
     
     if self.live_sr:
-      if angle_steers < 10:
-        sr = interp(angle_steers, self.angle_range, self.steerRatio_range)
-      else:
-        sr = max(sm['liveParameters'].steerRatio, 0.1) #Live SR
+      sr = max(sm['liveParameters'].steerRatio, 0.1) #Live SR
     else:
       sr = max(self.new_steerRatio, 0.1) #가변 SR
     VM.update_params(x, sr)
