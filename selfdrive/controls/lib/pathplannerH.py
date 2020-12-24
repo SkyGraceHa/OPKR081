@@ -86,10 +86,12 @@ class PathPlanner():
     self.lane_change_adjust_vel = [8.3, 16, 22, 30]
     self.lane_change_adjust_new = 0.0
 
-    self.angle_differ_range = [0, 45]
-    self.steerRatio_range = [CP.steerRatio, 17.5] # 가변 SR값 범위 설정
-    self.new_steerRatio = CP.steerRatio
-    self.new_steerRatio_prev = CP.steerRatio
+    # self.angle_differ_range = [0, 45]
+    # self.steerRatio_range = [CP.steerRatio, 16.5] # 가변 SR값 범위 설정
+    self.angle_range = [0, 40]
+    self.steerRatio_range = [13.5, CP.steerRatio] # 가변 SR값 범위 설정
+    self.new_steerRatio = 13.5 #CP.steerRatio
+    self.new_steerRatio_prev = 13.5 #CP.steerRatio
 
     self.steer_actuator_delay_range = [0.1, CP.steerActuatorDelay]
     self.steer_actuator_delay_vel = [3, 13]
@@ -143,9 +145,10 @@ class PathPlanner():
 
     # 가변 SR
     if not self.live_sr:
-      self.angle_diff = abs(anglesteer_desire) - abs(anglesteer_current)
+      # self.angle_diff = abs(anglesteer_desire) - abs(anglesteer_current)
       if abs(output_scale) >= 1 and v_ego > 8:
-        self.new_steerRatio_prev = interp(self.angle_diff, self.angle_differ_range, self.steerRatio_range)
+        # self.new_steerRatio_prev = interp(self.angle_diff, self.angle_differ_range, self.steerRatio_range)
+        self.new_steerRatio_prev = interp(angle_steers, self.angle_range, self.steerRatio_range)
         if self.new_steerRatio_prev > self.new_steerRatio:
           self.new_steerRatio = self.new_steerRatio_prev
       else:
