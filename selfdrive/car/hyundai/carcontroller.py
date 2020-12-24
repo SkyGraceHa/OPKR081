@@ -149,14 +149,16 @@ class CarController():
     self.scc_live = not CP.radarOffCan
     self.accActive = False
 
-    # self.model_speed_range = [30, 90, 255, 300]
-    # self.steerMax_range = [SteerLimitParams.STEER_MAX, int(self.params.get('SteerMaxBaseAdj')), int(self.params.get('SteerMaxBaseAdj')), 0]
-    # self.steerDeltaUp_range = [5, int(self.params.get('SteerDeltaUpAdj')), int(self.params.get('SteerDeltaUpAdj')), 0]
-    # self.steerDeltaDown_range = [10, int(self.params.get('SteerDeltaDownAdj')), int(self.params.get('SteerDeltaDownAdj')), 0]
-    self.angle_range = [0, 30, 50]    
-    self.steerMax_range = [int(self.params.get('SteerMaxBaseAdj')), SteerLimitParams.STEER_MAX * 0.8, SteerLimitParams.STEER_MAX]
-    self.steerDeltaUp_range = [int(self.params.get('SteerDeltaUpAdj')), 4, 5]
-    self.steerDeltaDown_range = [int(self.params.get('SteerDeltaDownAdj')), 7, 9]
+    # self.model_speed_range = [30, 40, 50, 60, 100, 150, 255, 300]
+    # self.SMAX = SteerLimitParams.STEER_MAX
+    # self.steerMax_range = [self.SMAX, self.SMAX * 0.9, self.SMAX*0.82, self.SMAX*0.76, self.SMAX*0.6, self.SMAX*0.5, int(self.params.get('SteerMaxBaseAdj')), 0]
+    # self.steerDeltaUp_range = [5, 4.5, 4, 3.5, 3, 3, 3, 0]
+    # self.steerDeltaDown_range = [9, 8, 7,   6, 5, 5, 5, 0]
+    self.angle_range = [0, 10, 15, 20, 30, 40, 60]
+    self.SMAX = SteerLimitParams.STEER_MAX # 약 510 이상(SteerMaxBaseAdj의 2배)으로 설정해야 아래 보간 로직이 맞음 
+    self.steerMax_range = [int(self.params.get('SteerMaxBaseAdj')), self.SMAX * 0.57, self.SMAX * 0.66, self.SMAX * 0.75, self.SMAX * 0.85, self.SMAX * 0.93, self.SMAX]
+    self.steerDeltaUp_range = [int(self.params.get('SteerDeltaUpAdj')), 3, 4, 4, 4, 5, 5]
+    self.steerDeltaDown_range = [int(self.params.get('SteerDeltaDownAdj')), 5, 6, 7, 8, 9, 10]
 
     self.steerMax = int(self.params.get('SteerMaxBaseAdj'))
     self.steerDeltaUp = int(self.params.get('SteerDeltaUpAdj'))
