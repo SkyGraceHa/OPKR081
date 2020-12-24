@@ -206,12 +206,12 @@ static void ui_draw_track(UIState *s, bool is_mpc, track_vertices_data *pvd) {
       track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
         COLOR_BLACK_ALPHA(200), COLOR_BLACK_ALPHA(20)); //nvgRGBA(0, 191, 255, 255), nvgRGBA(0, 95, 128, 50));
     } else {
-      int torque_scale = (int)fabs(255*(float)s->scene.output_scale);
+      int torque_scale = (int)fabs(180*(float)s->scene.output_scale);
       int red_lvl = fmin(255, torque_scale);
-      int green_lvl = fmin(255, 255-torque_scale);
+      int blue_lvl = fmin(255, 255-torque_scale);
       track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
-        nvgRGBA(          red_lvl,            green_lvl,  0, 255),
-        nvgRGBA((int)(0.7*red_lvl), (int)(0.7*green_lvl), 0, 50));
+        nvgRGBA(          red_lvl,  0,            blue_lvl,  255),
+        nvgRGBA((int)(0.9*red_lvl), 0, (int)(0.9* blue_lvl), 200));
     }
   } else {
     // Draw white vision track
