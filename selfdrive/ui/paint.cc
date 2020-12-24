@@ -484,16 +484,15 @@ static void ui_draw_debug(UIState *s)
 
     ui_print(s, ui_viz_rx, ui_viz_ry+400, "AD:%.2f", scene.pathPlan.steerActuatorDelay);
     ui_print(s, ui_viz_rx, ui_viz_ry+450, "SC:%.2f", scene.pathPlan.steerRateCost);
-    ui_print(s, ui_viz_rx, ui_viz_ry+500, "OS:%.3f", scene.output_scale);
-    nvgFontSize(s->vg, 45);
-    nvgFillColor(s->vg, COLOR_YELLOW_ALPHA(200));
-    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+    ui_print(s, ui_viz_rx, ui_viz_ry+500, "OS:%.2f", abs(scene.output_scale));
+    //ui_print(s, ui_viz_rx, ui_viz_ry+400, "Awareness:%.2f", scene.awareness_status);
+    //ui_print(s, ui_viz_rx, ui_viz_ry+470, "FaceProb:%.2f", scene.face_prob);
     if (s->lat_control == 0) {
-      ui_print(s, ui_viz_rx_center, ui_viz_ry+270, "PID");
+      ui_print(s, ui_viz_rx, ui_viz_ry+550, "LC:PID");
     } else if (s->lat_control == 1) {
-      ui_print(s, ui_viz_rx_center, ui_viz_ry+270, "INDI");
+      ui_print(s, ui_viz_rx, ui_viz_ry+550, "LC:INDI");
     } else if (s->lat_control == 2) {
-      ui_print(s, ui_viz_rx_center, ui_viz_ry+270, "LQR");
+      ui_print(s, ui_viz_rx, ui_viz_ry+550, "LC:LQR");
     }
     nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
