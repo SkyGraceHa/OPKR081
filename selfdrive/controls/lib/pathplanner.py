@@ -86,6 +86,7 @@ class PathPlanner():
     self.lane_change_adjust_vel = [8.3, 16, 22, 30]
     self.lane_change_adjust_new = 0.0
 
+    self.angle_range = [0, 50]
     self.angle_differ_range = [0, 45]
     self.steerRatio_range = [CP.steerRatio, 17.5] # 가변 SR값 범위 설정
     self.new_steerRatio = CP.steerRatio
@@ -159,7 +160,10 @@ class PathPlanner():
     x = max(sm['liveParameters'].stiffnessFactor, 0.1)
     
     if self.live_sr:
-      sr = max(sm['liveParameters'].steerRatio, 0.1) #Live SR
+      self.live_steerRatio_range = [CP.steerRatio, sm['liveParameters'].steerRatio] #  학습 SR값 범위 설정
+      self.live_steerRatio = interp(abs(anglesteer_current), self.angle_range, self.live_steerRatio_range)
+      # sr = max(sm['liveParameters'].steerRatio, 0.1) #Live SR
+      sr = self.live_steerRatio
     else:
       sr = max(self.new_steerRatio, 0.1) #가변 SR
     VM.update_params(x, sr)
