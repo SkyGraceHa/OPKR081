@@ -500,8 +500,9 @@ static void ui_draw_debug(UIState *s)
     nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150)); 
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+750, "←좌측간격(%%)→    차선폭(m)    ←우측간격(%%)→");
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+800, "%4.1f                     %4.2f                    %4.1f", 
+    //ui_print(s, ui_viz_rx_center, ui_viz_ry+750, "←좌측간격(%%)→    차선폭(m)    ←우측간격(%%)→");
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+750, "←      Left W     → || ←      Right W      →");
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+800, "%4.1f (%%)        %4.2f (m)       %4.1f (%%)", 
                                                     (scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100, 
                                                     scene.pathPlan.laneWidth, 
                                                     (abs(scene.pathPlan.rPoly)/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100);
