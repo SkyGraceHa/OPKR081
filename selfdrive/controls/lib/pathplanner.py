@@ -88,7 +88,7 @@ class PathPlanner():
 
     self.angle_range = [0, 50]
     self.angle_differ_range = [0, 45]
-    self.steerRatio_range = [CP.steerRatio, 17.5] # 가변 SR값 범위 설정
+    self.steerRatio_range = [CP.steerRatio, 17] # 가변 SR값 범위 설정
     self.new_steerRatio = CP.steerRatio
     self.new_steerRatio_prev = CP.steerRatio
 

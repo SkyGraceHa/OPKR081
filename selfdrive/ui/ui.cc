@@ -39,6 +39,7 @@ void ui_init(UIState *s) {
   read_param(&s->nDebugUi2, "DebugUi2");
   read_param(&s->nOpkrBlindSpotDetect, "OpkrBlindSpotDetect");
   read_param(&s->lat_control, "LateralControlMethod");
+  read_param(&s->speed_lim_off, "OpkrSpeedLimitOffset");
 
   s->fb = framebuffer_init("ui", 0, true, &s->fb_w, &s->fb_h);
   assert(s->fb);
@@ -388,7 +389,8 @@ void ui_update(UIState *s) {
       }
     } else if (((s->sm)->frame - (s->sm)->rcv_frame("controlsState")) > 5*UI_FREQ) {
       // car is started, but controls is lagging or died
-      if (s->scene.alert_text2 != "Controls Unresponsive") {
+      if (s->scene.alert_text2 != "Controls Unresponsive" &&
+          s->scene.alert_text1 != "Camera Malfunction") {
         s->sound->play(AudibleAlert::CHIME_WARNING_REPEAT);
         LOGE("Controls unresponsive");
       }
@@ -398,12 +400,30 @@ void ui_update(UIState *s) {
       s->scene.alert_size = cereal::ControlsState::AlertSize::FULL;
       s->status = STATUS_ALERT;
     }
+
+    const uint64_t frame_pkt = (s->sm)->rcv_frame("frame");
+    const uint64_t frame_delayed = (s->sm)->frame - frame_pkt;
+    const uint64_t since_started = (s->sm)->frame - s->started_frame;
+    if ((frame_pkt > s->started_frame || since_started > 15*UI_FREQ) && frame_delayed > 5*UI_FREQ) {
+      // controls is fine, but rear camera is lagging or died
+      s->scene.alert_text1 = "Camera Malfunction";
+      s->scene.alert_text2 = "Contact Support";
+      s->scene.alert_size = cereal::ControlsState::AlertSize::FULL;
+      s->status = STATUS_DISENGAGED;
+      s->sound->stop();
+    }
   }
 
   // Read params
-  if ((s->sm)->frame % (10*UI_FREQ) == 0) {
+  if ((s->sm)->frame % (5*UI_FREQ) == 0) {
+    read_param(&s->is_metric, "IsMetric");
     read_param(&s->is_OpenpilotViewEnabled, "IsOpenpilotViewEnabled");
-  } else if ((s->sm)->frame % (12*UI_FREQ) == 0) {
+    read_param(&s->nOpkrUIBrightness, "OpkrUIBrightness");
+    read_param(&s->nOpkrUIVolumeBoost, "OpkrUIVolumeBoost");
+    read_param(&s->limit_set_speed, "LimitSetSpeed");
+    read_param(&s->limit_set_speed_camera, "LimitSetSpeedCamera");
+    read_param(&s->lat_control, "LateralControlMethod");
+  } else if ((s->sm)->frame % (6*UI_FREQ) == 0) {
     int param_read = read_param(&s->last_athena_ping, "LastAthenaPingTime");
     if (param_read != 0) { // Failed to read param
       s->scene.athenaStatus = NET_DISCONNECTED;
@@ -412,17 +432,5 @@ void ui_update(UIState *s) {
     } else {
       s->scene.athenaStatus = NET_ERROR;
     }
-  } else if ((s->sm)->frame % (20*UI_FREQ) == 0) {
-    read_param(&s->is_metric, "IsMetric");
-    read_param(&s->nOpkrUIBrightness, "OpkrUIBrightness");
-    read_param(&s->nOpkrUIVolumeBoost, "OpkrUIVolumeBoost");
-    read_param(&s->limit_set_speed, "LimitSetSpeed");
-    read_param(&s->limit_set_speed_camera, "LimitSetSpeedCamera");
-    read_param(&s->nOpkrBlindSpotDetect, "OpkrBlindSpotDetect");
-    read_param(&s->lat_control, "LateralControlMethod");
-    read_param(&s->nOpkrAutoScreenOff, "OpkrAutoScreenOff");
-    read_param(&s->speed_lim_off, "OpkrSpeedLimitOffset");
-    read_param(&s->nDebugUi1, "DebugUi1");
-    read_param(&s->nDebugUi2, "DebugUi2");
   }
 }
