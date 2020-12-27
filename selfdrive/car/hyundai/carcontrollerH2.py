@@ -155,8 +155,8 @@ class CarController():
     self.scc_live = not CP.radarOffCan
     self.accActive = False
 
-    self.model_speed_range = [30, 90, 255, 300]
-    self.steerMax_range = [SteerLimitParams.STEER_MAX, int(self.params.get('SteerMaxBaseAdj')), int(self.params.get('SteerMaxBaseAdj')), 0]
+    self.model_speed_range = [30, 80, 255, 300]
+    self.steerMax_range = [SteerLimitParams.STEER_MAX, SteerLimitParams.STEER_MAX * 0.7, int(self.params.get('SteerMaxBaseAdj')), 0]
     self.steerDeltaUp_range = [5, int(self.params.get('SteerDeltaUpAdj')), int(self.params.get('SteerDeltaUpAdj')), 0]
     self.steerDeltaDown_range = [10, int(self.params.get('SteerDeltaDownAdj')), int(self.params.get('SteerDeltaDownAdj')), 0]
 
@@ -227,9 +227,9 @@ class CarController():
         self.steerDeltaUp = int(self.params.get('SteerDeltaUpAdj'))
         self.steerDeltaDown = int(self.params.get('SteerDeltaDownAdj'))
     else:
-      self.steerMax = int(self.params.get('SteerMaxBaseAdj'))
-      self.steerDeltaUp = int(self.params.get('SteerDeltaUpAdj'))
-      self.steerDeltaDown = int(self.params.get('SteerDeltaDownAdj'))
+      self.steerMax = 200 # int(self.params.get('SteerMaxBaseAdj'))
+      self.steerDeltaUp = 1 # int(self.params.get('SteerDeltaUpAdj'))
+      self.steerDeltaDown = 3 # int(self.params.get('SteerDeltaDownAdj'))
 
     param.STEER_MAX = min(SteerLimitParams.STEER_MAX, self.steerMax) # variable steermax
     param.STEER_DELTA_UP = max(int(self.params.get('SteerDeltaUpAdj')), self.steerDeltaUp) # variable deltaUp
