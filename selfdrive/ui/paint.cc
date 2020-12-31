@@ -200,23 +200,31 @@ static void update_track_data(UIState *s, const cereal::ModelDataV2::XYZTData::R
 
 static void ui_draw_track(UIState *s, bool is_mpc, track_vertices_data *pvd) {
   NVGpaint track_bg;
+  int torque_scale = 0;
+  int red_lvl = 0;
+  int blue_lvl = 0;
   if (is_mpc) {
     // Draw colored MPC track Kegman's
     if (s->scene.steerOverride) {
-      track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
-        COLOR_BLACK_ALPHA(200), COLOR_BLACK_ALPHA(20)); //nvgRGBA(0, 191, 255, 255), nvgRGBA(0, 95, 128, 50));
+      track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.35,
+                                  COLOR_BLACK_ALPHA(200), COLOR_BLACK_ALPHA(50)); 
     } else {
-      int torque_scale = (int)fabs(255*(float)s->scene.output_scale);
-      int red_lvl = fmin(255, torque_scale);
-      int green_lvl = fmin(255, 255-torque_scale);
-      track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
-        nvgRGBA(          red_lvl,            green_lvl,  0, 255),
-        nvgRGBA((int)(0.7*red_lvl), (int)(0.7*green_lvl), 0, 50));
+        if (fabs((float)s->scene.output_scale) > 0.7) {
+          torque_scale = (int)fabs(160*(float)s->scene.output_scale);
+          red_lvl = fmin(255, (torque_scale - 112) * 5);
+          blue_lvl = fmin(255, (160-torque_scale) * 5 );
+        } else {
+          red_lvl = 0;
+          blue_lvl = 255;
+        }
+        track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.35,
+                  nvgRGBA(          red_lvl,  0,             blue_lvl, 255),
+                  nvgRGBA((int)(0.9*red_lvl), 0, (int)(0.9* blue_lvl), 150));
     }
   } else {
     // Draw white vision track
-    track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
-      nvgRGBA(255, 255, 255, 200), nvgRGBA(255, 255, 255, 50));
+    track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.3,
+      nvgRGBA(255, 255, 255, 150), nvgRGBA(255, 255, 255, 100));
   }
   ui_draw_line(s, &pvd->v[0], pvd->cnt, nullptr, &track_bg);
 }
@@ -271,7 +279,7 @@ static void update_line_data(UIState *s, const cereal::ModelDataV2::XYZTData::Re
 static void ui_draw_vision_lane_lines(UIState *s) {
   const UIScene *scene = &s->scene;
   float red_lvl = 0.0;
-  float green_lvl = 0.0;
+  float blue_lvl = 0.0;
   // paint lanelines
   line_vertices_data *pvd_ll = &s->lane_line_vertices[0];
   for (int ll_idx = 0; ll_idx < 4; ll_idx++) {
@@ -279,16 +287,16 @@ static void ui_draw_vision_lane_lines(UIState *s) {
       update_line_data(s, scene->model.getLaneLines()[ll_idx], 0.025*scene->model.getLaneLineProbs()[ll_idx], pvd_ll + ll_idx, scene->max_distance);
     }
     red_lvl = 0.0;
-    green_lvl = 0.0;
+    blue_lvl = 0.0;
     if ( scene->lane_line_probs[ll_idx] > 0.4 ){
       red_lvl = 1 - (scene->lane_line_probs[ll_idx] - 0.4) * 2.5;
-      green_lvl = 1 ;
+      blue_lvl = 1 ;
     }
     else {
       red_lvl = 1 ;
-      green_lvl = 1 - (0.4 - scene->lane_line_probs[ll_idx]) * 2.5;
+      blue_lvl = 1 - (0.4 - scene->lane_line_probs[ll_idx]) * 2.5;
     }
-    NVGcolor color = nvgRGBAf(red_lvl, green_lvl, 0, 1);
+    NVGcolor color = nvgRGBAf(red_lvl, 0, blue_lvl, 1);
     ui_draw_line(s, (pvd_ll + ll_idx)->v, (pvd_ll + ll_idx)->cnt, &color, nullptr);
   }
 
@@ -497,8 +505,12 @@ static void ui_draw_debug(UIState *s)
     } else if (s->lat_control == 2) {
       ui_print(s, ui_viz_rx_center, ui_viz_ry+265, "LQR");
     }
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+725, " 좌측간격(m)    차선폭(m)    우측간격(m)");
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+775, "%.2f                    %.2f                    %.2f", scene.pathPlan.lPoly, scene.pathPlan.laneWidth, abs(scene.pathPlan.rPoly));
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+725, "←         Left W        → || ←        Right W        →");
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+775, "%4.1f %%        %3.1f m       %4.1f %%", 
+                                                    (scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100, 
+                                                    scene.pathPlan.laneWidth, 
+                                                    (abs(scene.pathPlan.rPoly)/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100);
   }
 }
 

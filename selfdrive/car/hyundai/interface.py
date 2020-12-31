@@ -30,9 +30,9 @@ class CarInterface(CarInterfaceBase):
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
 
     ret.carName = "hyundai"
-    ret.safetyModel = car.CarParams.SafetyModel.hyundaiLegacy
-    #if candidate in [CAR.SONATA]:
-    #  ret.safetyModel = car.CarParams.SafetyModel.hyundai
+    ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity
+    if candidate in [CAR.GRANDEUR_HEV, CAR.GRANDEUR, CAR.SONATA]:
+      ret.safetyModel = car.CarParams.SafetyModel.hyundai
 
 
     params = Params()
@@ -50,7 +50,7 @@ class CarInterface(CarInterfaceBase):
     LqrSteerMaxV = float(int(params.get('SteerMaxvAdj')) * 0.1)
 
     # Most Hyundai car ports are community features for now
-    ret.communityFeature = False
+    ret.communityFeature = True
 
     tire_stiffness_factor = float(int(params.get('TireStiffnessFactorAdj')) * 0.01)
     ret.steerActuatorDelay = float(int(params.get('SteerActuatorDelayAdj')) * 0.01)
@@ -96,7 +96,7 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.7
     elif candidate in [CAR.GRANDEUR, CAR.GRANDEUR_HEV]:
       ret.mass = 1640. + STD_CARGO_KG
-      ret.wheelbase = 2.845
+      ret.wheelbase = 2.885
     elif candidate == CAR.VELOSTER:
       ret.mass = 3558. * CV.LB_TO_KG
       ret.wheelbase = 2.80
