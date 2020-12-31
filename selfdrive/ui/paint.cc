@@ -223,7 +223,7 @@ static void ui_draw_track(UIState *s, bool is_mpc, track_vertices_data *pvd) {
     }
   } else {
     // Draw white vision track
-    track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
+    track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.3,
       nvgRGBA(255, 255, 255, 150), nvgRGBA(255, 255, 255, 100));
   }
   ui_draw_line(s, &pvd->v[0], pvd->cnt, nullptr, &track_bg);
@@ -279,7 +279,7 @@ static void update_line_data(UIState *s, const cereal::ModelDataV2::XYZTData::Re
 static void ui_draw_vision_lane_lines(UIState *s) {
   const UIScene *scene = &s->scene;
   float red_lvl = 0.0;
-  float green_lvl = 0.0;
+  float blue_lvl = 0.0;
   // paint lanelines
   line_vertices_data *pvd_ll = &s->lane_line_vertices[0];
   for (int ll_idx = 0; ll_idx < 4; ll_idx++) {
@@ -287,16 +287,16 @@ static void ui_draw_vision_lane_lines(UIState *s) {
       update_line_data(s, scene->model.getLaneLines()[ll_idx], 0.025*scene->model.getLaneLineProbs()[ll_idx], pvd_ll + ll_idx, scene->max_distance);
     }
     red_lvl = 0.0;
-    green_lvl = 0.0;
+    blue_lvl = 0.0;
     if ( scene->lane_line_probs[ll_idx] > 0.4 ){
       red_lvl = 1 - (scene->lane_line_probs[ll_idx] - 0.4) * 2.5;
-      green_lvl = 1 ;
+      blue_lvl = 1 ;
     }
     else {
       red_lvl = 1 ;
-      green_lvl = 1 - (0.4 - scene->lane_line_probs[ll_idx]) * 2.5;
+      blue_lvl = 1 - (0.4 - scene->lane_line_probs[ll_idx]) * 2.5;
     }
-    NVGcolor color = nvgRGBAf(red_lvl, green_lvl, 0, 1);
+    NVGcolor color = nvgRGBAf(red_lvl, 0, blue_lvl, 1);
     ui_draw_line(s, (pvd_ll + ll_idx)->v, (pvd_ll + ll_idx)->cnt, &color, nullptr);
   }
 
