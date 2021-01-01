@@ -288,13 +288,13 @@ static void ui_draw_vision_lane_lines(UIState *s) {
     }
     red_lvl = 0.0;
     blue_lvl = 0.0;
-    if ( scene->lane_line_probs[ll_idx] > 0.4 ){
-      red_lvl = 1 - (scene->lane_line_probs[ll_idx] - 0.4) * 2.5;
+    if ( scene->lane_line_probs[ll_idx] > 0.25 ){
+      red_lvl = 1 - (scene->lane_line_probs[ll_idx] - 0.25) * 4;
       blue_lvl = 1 ;
     }
     else {
       red_lvl = 1 ;
-      blue_lvl = 1 - (0.4 - scene->lane_line_probs[ll_idx]) * 2.5;
+      blue_lvl = 1 - (0.25 - scene->lane_line_probs[ll_idx]) * 4;
     }
     NVGcolor color = nvgRGBAf(red_lvl, 0, blue_lvl, 1);
     ui_draw_line(s, (pvd_ll + ll_idx)->v, (pvd_ll + ll_idx)->cnt, &color, nullptr);
