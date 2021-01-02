@@ -508,8 +508,8 @@ static void ui_draw_debug(UIState *s)
 
     nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    if ((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 30.0 or 
-       ((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 70.0 {
+    if (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 30.0) or 
+       (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 70.0) {
         nvgFillColor(s->vg, COLOR_RED_ALPHA(150));
        }
     else {
