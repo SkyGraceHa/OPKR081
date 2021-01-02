@@ -174,7 +174,7 @@ static void ui_draw_line(UIState *s, const vertex_data *v, const int cnt, NVGcol
 
 static void update_track_data(UIState *s, const cereal::ModelDataV2::XYZTData::Reader &line, track_vertices_data *pvd) {
   const UIScene *scene = &s->scene;
-  const float off = 0.3; 
+  const float off = 1.0; // 0.5 => 1.0 가이드선 굵기를 실제 차량 사이즈로 키우기
   int max_idx = 0;
   float lead_d;
   if (s->sm->updated("radarState")) {
@@ -505,18 +505,11 @@ static void ui_draw_debug(UIState *s)
     } else if (s->lat_control == 2) {
       ui_print(s, ui_viz_rx_center, ui_viz_ry+265, "LQR");
     }
-
     nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    if ((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 30.0 or 
-       ((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 70.0 {
-        nvgFillColor(s->vg, COLOR_RED_ALPHA(150));
-       }
-    else {
-        nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
-    }
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+750, "←         Left W        → || ←        Right W        →");
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+800, "%4.1f %%        %3.1f m       %4.1f %%", 
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+725, "←         Left W        → || ←        Right W        →");
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+775, "%4.1f %%        %3.1f m       %4.1f %%", 
                                                     (scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100, 
                                                     scene.pathPlan.laneWidth, 
                                                     (abs(scene.pathPlan.rPoly)/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100);
