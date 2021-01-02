@@ -12,7 +12,7 @@ OpkrSteerAngleCorrection:0
 PutPrebuiltOn:0
 FingerprintIssuedFix:0
 LdwsCarFix:0
-LateralControlMethod:2
+LateralControlMethod:0
 CruiseStatemodeSelInit:1
 InnerLoopGain:30
 OuterLoopGain:20
@@ -59,3 +59,5 @@ OpkrVariableSteerDelta:0
 FingerprintTwoSet:1
 OpkrVariableCruiseProfile:0
 OpkrLiveTune:0
+OpkrEnableMap:1
+OpkrDrivingRecord:0

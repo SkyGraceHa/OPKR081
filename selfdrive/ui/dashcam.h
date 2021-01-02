@@ -200,7 +200,7 @@ void draw_date_time(UIState *s) {
   // Get local time to display
   char now[50];
   struct tm tm = get_time_struct();
-  snprintf(now,sizeof(now),"%04d/%02d/%02d  %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  snprintf(now,sizeof(now),"%04d-%02d-%02d  %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
   nvgBeginPath(s->vg);
     nvgRoundedRect(s->vg, rect_x, rect_y, rect_w, rect_h, 0);
@@ -213,7 +213,7 @@ void draw_date_time(UIState *s) {
   nvgFontSize(s->vg, 34);
     nvgFontFace(s->vg, "sans-semibold");
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
-    nvgText(s->vg,rect_x+231,rect_y+55,now,NULL);
+    nvgText(s->vg,rect_x+229,rect_y+57,now,NULL);
 }
 
 static void rotate_video() {
@@ -347,12 +347,14 @@ bool dashcam( UIState *s, int touch_x, int touch_y ) {
     // Assume car is not in drive so stop recording
     stop_capture();
   }
-//  if (s->scene.v_ego > 2.1 && captureState == CAPTURE_STATE_NOT_CAPTURING && !s->scene.engaged) {
-//    start_capture();
-//  } else if (s->scene.v_ego < 1.5 && !s->scene.engaged) {
-//  if (s->scene.controls_state.getVEgo() < 1.5 && !s->scene.controls_state.getEnabled()) {
-//    stop_capture();
-//  }
+
+  if (s->driving_record == 1) {
+    if (s->scene.v_ego >= 1.5 && captureState == CAPTURE_STATE_NOT_CAPTURING && s->scene.controls_state.getEnabled()) {
+      start_capture();
+    } else if (s->scene.v_ego < 1 && captureState == CAPTURE_STATE_CAPTURING && s->scene.controls_state.getEnabled()) {
+      stop_capture();
+    }
+  }
   s->scene.recording = (captureState != CAPTURE_STATE_NOT_CAPTURING);
   
   return touched;
