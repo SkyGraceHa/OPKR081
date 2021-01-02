@@ -209,7 +209,7 @@ static void ui_draw_track(UIState *s, bool is_mpc, track_vertices_data *pvd) {
       track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.35,
                                   COLOR_BLACK_ALPHA(200), COLOR_BLACK_ALPHA(50)); 
     } else {
-        if (s->scene.output_scale > 0.8) {
+        if (fabs(s->scene.output_scale) > 0.8) {
           torque_scale = (int)fabs(160*(float)s->scene.output_scale);
           red_lvl = fmin(255, (torque_scale - 128) * 8);
           blue_lvl = fmin(255, (160-torque_scale) * 8 );
@@ -479,7 +479,6 @@ static void ui_draw_debug(UIState *s)
     ui_draw_text(s->vg, 0, 1024, scene.alertTextMsg1.c_str(), 50, COLOR_WHITE_ALPHA(150), s->font_sans_semibold);
     ui_draw_text(s->vg, 0, 1078, scene.alertTextMsg2.c_str(), 50, COLOR_WHITE_ALPHA(150), s->font_sans_semibold);
   }
-
   
   nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
   if (s->nDebugUi2 == 1) {
@@ -508,19 +507,20 @@ static void ui_draw_debug(UIState *s)
     }
     nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    if ((((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 30.0) or 
-        (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 70.0)) {
-        nvgFillColor(s->vg, COLOR_RED_ALPHA(150));
-       }
-    else if ((((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 40.0) or 
-             (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 60.0)) {
-        nvgFillColor(s->vg, COLOR_YELLOW_ALPHA(150));
-      }
-    else {
-        nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
-    }
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+725, "←         Left W        → || ←        Right W        →");
-    ui_print(s, ui_viz_rx_center, ui_viz_ry+775, "%4.1f %%        %3.1f m       %4.1f %%", 
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150)); 
+    // if ((((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 30.0) or 
+    //     (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 70.0)) {
+    //     nvgFillColor(s->vg, COLOR_RED_ALPHA(150));
+    //    }
+    // else if ((((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 40.0) or 
+    //          (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 60.0)) {
+    //     nvgFillColor(s->vg, COLOR_YELLOW_ALPHA(150));
+    //   }
+    // else {
+    //     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
+    // }
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+775, "←         Left W        → || ←        Right W        →");
+    ui_print(s, ui_viz_rx_center, ui_viz_ry+825, "%4.1f %%        %3.1f m       %4.1f %%", 
                                                     (scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100, 
                                                     scene.pathPlan.laneWidth, 
                                                     (abs(scene.pathPlan.rPoly)/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100);
