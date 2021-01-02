@@ -296,7 +296,8 @@ static void ui_draw_vision_lane_lines(UIState *s) {
       red_lvl = 1 ;
       blue_lvl = 1 - (0.25 - scene->lane_line_probs[ll_idx]) * 4;
     }
-    NVGcolor color = nvgRGBAf(red_lvl, 0, blue_lvl, 1);
+//    NVGcolor color = nvgRGBAf(red_lvl, 0, blue_lvl, 1);
+    NVGcolor color = nvgRGBAf(0, 0, 1, blue_lvl); 
     ui_draw_line(s, (pvd_ll + ll_idx)->v, (pvd_ll + ll_idx)->cnt, &color, nullptr);
   }
 
@@ -507,7 +508,17 @@ static void ui_draw_debug(UIState *s)
     }
     nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
+    if ((((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 30.0) or 
+        (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 70.0)) {
+        nvgFillColor(s->vg, COLOR_RED_ALPHA(150));
+       }
+    else if ((((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) < 40.0) or 
+             (((scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100) > 60.0)) {
+        nvgFillColor(s->vg, COLOR_YELLOW_ALPHA(150));
+      }
+    else {
+        nvgFillColor(s->vg, COLOR_WHITE_ALPHA(150));
+    }
     ui_print(s, ui_viz_rx_center, ui_viz_ry+725, "←         Left W        → || ←        Right W        →");
     ui_print(s, ui_viz_rx_center, ui_viz_ry+775, "%4.1f %%        %3.1f m       %4.1f %%", 
                                                     (scene.pathPlan.lPoly/(scene.pathPlan.lPoly+abs(scene.pathPlan.rPoly)))*100, 
