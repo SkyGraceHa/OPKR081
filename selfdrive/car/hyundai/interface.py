@@ -141,6 +141,8 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kdBP = [0.]
       ret.lateralTuning.pid.kdV = [PidKd]
       ret.lateralTuning.pid.newKfTuned = True
+      ret.steerMaxV = [LqrSteerMaxV]
+      ret.steerMaxBP = [0.]      
     elif int(params.get('LateralControlMethod')) == 1:
       ret.lateralTuning.init('indi')
       ret.lateralTuning.indi.innerLoopGain = InnerLoopGain
