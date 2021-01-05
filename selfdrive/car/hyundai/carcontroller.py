@@ -165,8 +165,8 @@ class CarController():
     self.steerMax_range = [int(self.params.get('SteerMaxBaseAdj')), self.SMAX * 0.57, self.SMAX * 0.66, self.SMAX * 0.75, self.SMAX * 0.85, self.SMAX * 0.93, self.SMAX]
 
     self.steerMax = int(self.params.get('SteerMaxBaseAdj'))
-    # self.steerDeltaUp = int(self.params.get('SteerDeltaUpAdj'))
-    # self.steerDeltaDown = int(self.params.get('SteerDeltaDownAdj'))
+    self.steerDeltaUp = int(self.params.get('SteerDeltaUpAdj'))
+    self.steerDeltaDown = int(self.params.get('SteerDeltaDownAdj'))
 
     self.variable_steer_max = int(self.params.get('OpkrVariableSteerMax')) == 1
     self.variable_steer_delta = int(self.params.get('OpkrVariableSteerDelta')) == 1
