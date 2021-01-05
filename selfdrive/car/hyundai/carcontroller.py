@@ -238,10 +238,12 @@ class CarController():
     #param.STEER_DELTA_DOWN = SteerLimitParams.STEER_DELTA_DOWN # fixed deltaDown
 
     # Steering Torque
-    if 0 <= self.driver_steering_torque_above_timer < 100:
-      new_steer = actuators.steer * self.steerMax * (self.driver_steering_torque_above_timer / 100)
-    else:
-      new_steer = actuators.steer * self.steerMax
+    # if 0 <= self.driver_steering_torque_above_timer < 100:
+    #   new_steer = actuators.steer * self.steerMax * (self.driver_steering_torque_above_timer / 100)
+    # else:
+    #   new_steer = actuators.steer * self.steerMax
+    new_steer = actuators.steer * self.steerMax # 임시 변경 적용.....
+    
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, param)
     self.steer_rate_limited = new_steer != apply_steer
 
