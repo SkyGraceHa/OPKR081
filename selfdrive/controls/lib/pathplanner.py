@@ -14,7 +14,7 @@ from cereal import car, log
 LaneChangeState = log.PathPlan.LaneChangeState
 LaneChangeDirection = log.PathPlan.LaneChangeDirection
 
-LOG_MPC = os.environ.get('LOG_MPC', False)
+LOG_MPC = os.environ.get('LOG_MPC', True) #MPC 경로 UI 표시 여부
 
 LANE_CHANGE_SPEED_MIN = int(Params().get('OpkrLaneChangeSpeed')) * CV.KPH_TO_MS
 LANE_CHANGE_TIME_MAX = 10.
