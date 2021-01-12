@@ -81,7 +81,7 @@ def create_clu11(packer, frame, bus, clu11, button, speed):
 def create_lfahda_mfc(packer, enabled, hda_set_speed=0):   
   values = {
     #"LFA_USM": lfahda_mfc["LFA_USM"],
-    # "LFA_USM": 2,
+    "LFA_USM": 2,
     "LFA_Icon_State": 2 if enabled else 0,
     # "LFA_SysWarning": 0,
     #"HDA_USM": lfahda_mfc["HDA_USM"],
