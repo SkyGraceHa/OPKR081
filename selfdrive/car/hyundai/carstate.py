@@ -224,6 +224,7 @@ class CarState(CarStateBase):
     # save the entire LKAS11, CLU11, SCC12 and MDPS12
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.clu11 = cp.vl["CLU11"]
+    #self.lfahda_mfc = cp_cam.vl["LFAHDA_MFC"]
     self.scc11 = cp_scc.vl["SCC11"]
     self.scc12 = cp_scc.vl["SCC12"]
     self.mdps12 = cp_mdps.vl["MDPS12"]
@@ -346,7 +347,7 @@ class CarState(CarStateBase):
       ("PRESSURE_RL", "TPMS11", 0),
       ("PRESSURE_RR", "TPMS11", 0),
 
-      ("ACCMode", "SCC12", 0),
+      ("ACCMode", "SCC12", 1),
       ("CF_VSM_Prefill", "SCC12", 0),
       ("CF_VSM_DecCmdAct", "SCC12", 0),
       ("CF_VSM_HBACmd", "SCC12", 0),
@@ -553,7 +554,7 @@ class CarState(CarStateBase):
         ("Navi_SCC_Camera_Status", "SCC11", 2),
 
 
-        ("ACCMode", "SCC12", 0),
+        ("ACCMode", "SCC12", 1),
         ("CF_VSM_Prefill", "SCC12", 0),
         ("CF_VSM_DecCmdAct", "SCC12", 0),
         ("CF_VSM_HBACmd", "SCC12", 0),
@@ -612,7 +613,9 @@ class CarState(CarStateBase):
       ("CF_Lkas_MsgCount", "LKAS11", 0),
       ("CF_Lkas_FusionState", "LKAS11", 0),
       ("CF_Lkas_FcwOpt_USM", "LKAS11", 0),
-      ("CF_Lkas_LdwsOpt_USM", "LKAS11", 0)
+      ("CF_Lkas_LdwsOpt_USM", "LKAS11", 0),
+      # ("HDA_USM", "LFAHDA_MFC", 0),
+      # ("LFA_USM", "LFAHDA_MFC", 0),
     ]
 
     checks = [
@@ -636,7 +639,7 @@ class CarState(CarStateBase):
         ("Navi_SCC_Camera_Act", "SCC11", 0),
         ("Navi_SCC_Camera_Status", "SCC11", 2),
 
-        ("ACCMode", "SCC12", 0),
+        ("ACCMode", "SCC12", 1),
         ("CF_VSM_Prefill", "SCC12", 0),
         ("CF_VSM_DecCmdAct", "SCC12", 0),
         ("CF_VSM_HBACmd", "SCC12", 0),

@@ -47,8 +47,8 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
     values["CF_Lkas_LdwsActivemode"] = 2
     values["CF_Lkas_SysWarning"] = lkas11["CF_Lkas_SysWarning"]
 
-  elif car_fingerprint in [CAR.OPTIMA, CAR.OPTIMA_HEV, CAR.CADENZA, CAR.CADENZA_HEV]:
-    values["CF_Lkas_LdwsActivemode"] = 0
+  # elif car_fingerprint in [CAR.OPTIMA, CAR.OPTIMA_HEV, CAR.CADENZA, CAR.CADENZA_HEV]:
+  #   values["CF_Lkas_LdwsActivemode"] = 0
     
   ldws_car_fix = int(Params().get('LdwsCarFix')) == 1
   if ldws_car_fix:
@@ -78,23 +78,43 @@ def create_clu11(packer, frame, bus, clu11, button, speed):
   values["CF_Clu_AliveCnt1"] = frame % 0x10
   return packer.make_can_msg("CLU11", bus, values)
 
-def create_lfa_mfa(packer, frame, enabled):
+def create_lfahda_mfc(packer, enabled, hda_set_speed=0):   
   values = {
-    "ACTIVE": enabled,
+    #"LFA_USM": lfahda_mfc["LFA_USM"],
+    # "LFA_USM": 2,
+    "LFA_Icon_State": 2 if enabled else 0,
+    # "LFA_SysWarning": 0,
+    #"HDA_USM": lfahda_mfc["HDA_USM"],
     "HDA_USM": 2,
+    #"HDA_Active": 1 if hda_set_speed else 0,
+    "HDA_Active": 1 if enabled else 0,
+    #"HDA_Icon_State": 2 if hda_set_speed else 0,
+    "HDA_Icon_State": 2 if enabled else 0,
+    "HDA_VSetReq": hda_set_speed,
+
+    #"HDA_USM": 2,
+    #"HDA_C_State": 5 if enabled else 0,
+    #"HDA_VSetReq": hda_speed_limit if enabled else 0,
+    #"LFA_SysWarning": 0,
+    #"LFA_Icon_State": 2 if enabled else 0,
+    #"LFA_USM": 2,
   }
 
-  # ACTIVE 1 = Green steering wheel icon
+  # HDA_USM 2 = ?
 
-  # LFA_USM 2 & 3 = LFA cancelled, fast loud beeping
-  # LFA_USM 0 & 1 = No mesage
+  # HDA_C_State 0 = HDA not available
+  # HDA_C_State 4 = HDA available
+  # HDA_C_State 5 = HDA active
+
+  # HDA_VSetReq = HDA speed limit
 
   # LFA_SysWarning 1 = "Switching to HDA", short beep
   # LFA_SysWarning 2 = "Switching to Smart Cruise control", short beep
   # LFA_SysWarning 3 =  LFA error
 
-  # ACTIVE2: nothing
-  # HDA_USM: nothing
+  # LFA_Icon_State 0 = no wheel
+  # LFA_Icon_State 1 = white wheel
+  # LFA_Icon_State 2 = green wheel
 
   return packer.make_can_msg("LFAHDA_MFC", 0, values)
 
