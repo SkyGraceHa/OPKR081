@@ -93,7 +93,7 @@ def create_lfahda_mfc(packer, enabled, hda_set_speed=0):
     "HDA_VSetReq": hda_set_speed,
 
     #"HDA_USM": 2,
-    #"HDA_C_State": 5 if enabled else 0,
+    "HDA_C_State": 5 if enabled else 0,
     #"HDA_VSetReq": hda_speed_limit if enabled else 0,
     #"LFA_SysWarning": 0,
     #"LFA_Icon_State": 2 if enabled else 0,
