@@ -217,14 +217,17 @@ static void ui_draw_track(UIState *s, bool is_mpc, track_vertices_data *pvd) {
           red_lvl = 0;
           blue_lvl = 255;
         }
-        track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.35,
+        track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.15,
                   nvgRGBA(          red_lvl,  200,             blue_lvl, 255),
-                  nvgRGBA((int)(0.9*red_lvl), 200, (int)(0.9* blue_lvl), 150));
+                  nvgRGBA(20, 40, 80, 200));
+                  //nvgRGBA((int)(0.9*red_lvl), 200, (int)(0.9* blue_lvl), 150));                  
     }
   } else {
     // Draw white vision track
-    track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.3,
-      nvgRGBA(255, 255, 255, 150), nvgRGBA(255, 255, 255, 100));
+    track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.1,
+      nvgRGBA(255, 255, 255, 150), nvgRGBA(20, 40, 80, 100));
+      //nvgRGBA(255, 255, 255, 150), nvgRGBA(255, 255, 255, 100));
+
   }
   ui_draw_line(s, &pvd->v[0], pvd->cnt, nullptr, &track_bg);
 }
