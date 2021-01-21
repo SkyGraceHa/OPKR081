@@ -87,7 +87,7 @@ typedef enum UIStatus {
 static std::map<UIStatus, NVGcolor> bg_colors = {
   {STATUS_OFFROAD, nvgRGBA(0x10, 0x10, 0x10, 0xf1)},
   {STATUS_DISENGAGED, nvgRGBA(0x78, 0x78, 0x78, 0xc8)},
-  {STATUS_ENGAGED, nvgRGBA(0x00, 0x64, 0x78, 0xf1)},
+  {STATUS_ENGAGED, nvgRGBA(0x00, 0x64, 0x99, 0xf1)},
   {STATUS_WARNING, nvgRGBA(0xDA, 0x6F, 0x25, 0xc8)},
   {STATUS_ALERT, nvgRGBA(0xab, 0x20, 0x00, 0xc8)},
 };
@@ -169,6 +169,7 @@ typedef struct UIScene {
   bool standStill;
   float limitSpeedCamera;
   float v_ego;
+  float vSetDis;  
 
   cereal::HealthData::HwType hwType;
   int satelliteCount;
