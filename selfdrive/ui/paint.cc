@@ -592,7 +592,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   const int text_x = viz_maxspeed_x + (viz_maxspeed_xo / 2) + (viz_maxspeed_w / 2);
-  ui_draw_text(s->vg, text_x, 142, "Max", 26 * 2.5, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), s->font_sans_regular);
+  ui_draw_text(s->vg, text_x, 142, "Max", 26 * 2.5, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), s->font_sans_bold);
 
   if (is_cruise_set && s->scene.controls_state.getEnabled()) {
     snprintf(maxspeed_str, sizeof(maxspeed_str), "%d", maxspeed_calc);
@@ -648,8 +648,8 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   // Draw "Speed Limit" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   color = is_speedlim_valid && s->is_ego_over_limit ? COLOR_WHITE : COLOR_BLACK;
-  ui_draw_text(s->vg, text_x+1, 132, "Smart", 24 * 2.0, color, s->font_sans_regular);
-  ui_draw_text(s->vg, text_x, 152, "Cruise", 24 * 2.0, color, s->font_sans_regular);
+  ui_draw_text(s->vg, text_x+1, 125, "Smart", 24 * 2.0, color, s->font_sans_bold);
+  ui_draw_text(s->vg, text_x, 152, "Cruise", 24 * 2.0, color, s->font_sans_bold);
     
   // Draw Speed Text
   color = s->is_ego_over_limit ? COLOR_WHITE : COLOR_BLACK;
