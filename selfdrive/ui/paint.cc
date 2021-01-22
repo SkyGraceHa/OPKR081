@@ -648,7 +648,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   // Draw "Speed Limit" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   color = is_speedlim_valid && s->is_ego_over_limit ? COLOR_WHITE : COLOR_BLACK;
-  ui_draw_text(s->vg, text_x+1, 123, "Smart", 24 * 2.0, color, s->font_sans_bold);
+  ui_draw_text(s->vg, text_x, 123, "Smart", 24 * 2.0, color, s->font_sans_bold);
   ui_draw_text(s->vg, text_x, 155, "Cruise", 24 * 2.0, color, s->font_sans_bold);
     
   // Draw Speed Text
