@@ -610,9 +610,13 @@ static void ui_draw_vision_speedlimit(UIState *s) {
     speedlim_calc = speedlimit * 3.6 + 0.5;
   }
 
-  speedlim_calc = s->scene.vSetDis; //show cruise set speed on cluster
+  if (s->enable_osm == 1) {
+    is_speedlim_valid = s->scene.speedlimit_valid;
+  } else {
+    speedlim_calc = s->scene.vSetDis; // to show cruise set speed on cluster
+    is_speedlim_valid = s->scene.vSetDis >= 30.0;
+  }
 
-  bool is_speedlim_valid = s->scene.speedlimit_valid;
   float hysteresis_offset = 0.5;
   if (s->is_ego_over_limit) {
     hysteresis_offset = 0.0;
@@ -648,8 +652,12 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   // Draw "Speed Limit" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   color = is_speedlim_valid && s->is_ego_over_limit ? COLOR_WHITE : COLOR_BLACK;
-  ui_draw_text(s->vg, text_x, 123, "Smart", 24 * 2.0, color, s->font_sans_bold);
-  ui_draw_text(s->vg, text_x, 155, "Cruise", 24 * 2.0, color, s->font_sans_bold);
+  if (s->enable_osm == 1) {
+    ui_draw_text(s->vg, text_x, 142, "LimitSpeed", 26 * 2.0, color, s->font_sans_regular);
+  } else {
+    ui_draw_text(s->vg, text_x, 123, "Smart", 24 * 2.0, color, s->font_sans_bold);
+    ui_draw_text(s->vg, text_x, 155, "Cruise", 24 * 2.0, color, s->font_sans_bold);
+  }
     
   // Draw Speed Text
   color = s->is_ego_over_limit ? COLOR_WHITE : COLOR_BLACK;
