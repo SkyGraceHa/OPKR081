@@ -28,30 +28,6 @@ class Spdctrl(SpdController):
         self.target_speed_camera = 0
 
     def update_lead(self, sm, CS, dRel, yRel, vRel):
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        logcat = "logcat -d -s opkrspdlimit"
-        tail = "tail -1"
-        awk = "awk '{{print $8}}'"
-        logcat_data = subprocess.Popen(logcat.split(), stdout=subprocess.PIPE)         
-        tail_data = subprocess.Popen(tail.split(), stdin=logcat_data.stdout, stdout=subprocess.PIPE)
-        logcat_data.stdout.close()
-        awk_data = subprocess.Popen(awk.split(), stdin=tail_data.stdout, stdout=subprocess.PIPE)
-        tail_data.stdout.close()
-        limitspeed = float(awk_data.stdout.read())
-        awk_data.stdout.close()
- 
-        print('speed={}'.format(limitspeed))
-
-        #os.system("logcat -d -s "opkrspdlimit" | grep -e "opkrspdlimit" | tail -n 1")
-        #opkrspdlimit = subprocess.check_output(["logcat", "-d", "-s", "opkrspdlimit", "|", "grep", "-e", "opkrspdlimit", "|", "tail", "-n", "1"], encoding='utf8')
-=======
->>>>>>> parent of e0c115bc... Update spdctrl.py
-=======
->>>>>>> parent of e0c115bc... Update spdctrl.py
-=======
->>>>>>> parent of e0c115bc... Update spdctrl.py
         self.osm_enable = int(Params().get("LimitSetSpeed", encoding='utf8')) == 1
         self.osm_enable_camera = int(Params().get("LimitSetSpeedCamera", encoding='utf8')) == 1
         self.osm_spdlimit_offset = int(Params().get("OpkrSpeedLimitOffset", encoding='utf8'))
