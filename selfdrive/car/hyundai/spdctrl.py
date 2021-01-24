@@ -39,7 +39,7 @@ class Spdctrl(SpdController):
         logcat_data.stdout.close()
         awk_data = subprocess.Popen(awk.split(), stdin=tail_data.stdout, stdout=subprocess.PIPE)
         tail_data.stdout.close()
-        limitspeed = awk_data.stdout.read()
+        limitspeed = float(awk_data.stdout.read())
         awk_data.stdout.close()
  
         print('speed={}'.format(limitspeed))
@@ -61,7 +61,6 @@ class Spdctrl(SpdController):
         lead2_status = plan.status2
         self.target_speed_road = plan.targetSpeed + self.osm_spdlimit_offset
         self.target_speed_camera = plan.targetSpeedCamera + self.osm_spdlimit_offset
-        limitspeed = float(limitspeed)
         self.target_speed_map = int(limitspeed)
         
         if self.map_enable:
