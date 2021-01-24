@@ -39,7 +39,7 @@ class Spdctrl(SpdController):
         logcat_data.stdout.close()
         awk_data = subprocess.Popen(awk.split(), stdin=tail_data.stdout, stdout=subprocess.PIPE)
         tail_data.stdout.close()
-        limitspeed = awk_data.stdout.read()
+        limitspeed = 0 #awk_data.stdout.read()
         awk_data.stdout.close()
  
         print('speed={}'.format(limitspeed))
