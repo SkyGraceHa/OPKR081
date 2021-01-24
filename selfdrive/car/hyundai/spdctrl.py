@@ -29,6 +29,7 @@ class Spdctrl(SpdController):
 
     def update_lead(self, sm, CS, dRel, yRel, vRel):
 <<<<<<< HEAD
+<<<<<<< HEAD
         logcat = "logcat -d -s opkrspdlimit"
         tail = "tail -1"
         awk = "awk '{{print $8}}'"
@@ -44,6 +45,8 @@ class Spdctrl(SpdController):
 
         #os.system("logcat -d -s "opkrspdlimit" | grep -e "opkrspdlimit" | tail -n 1")
         #opkrspdlimit = subprocess.check_output(["logcat", "-d", "-s", "opkrspdlimit", "|", "grep", "-e", "opkrspdlimit", "|", "tail", "-n", "1"], encoding='utf8')
+=======
+>>>>>>> parent of e0c115bc... Update spdctrl.py
 =======
 >>>>>>> parent of e0c115bc... Update spdctrl.py
         self.osm_enable = int(Params().get("LimitSetSpeed", encoding='utf8')) == 1
