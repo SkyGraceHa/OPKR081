@@ -104,10 +104,7 @@ class SpdController():
 
         self.osm_spd_enable = False
         self.osm_spd_enable_camera = False
-        self.map_spd_enable = False
-        self.map_spd_camera = 0
         self.osm_spd_limit_offset = 0
-        self.osm_spd_enable_map = int(Params().get("OpkrEnableMap", encoding='utf8')) == 1
 
     def reset(self):
         self.v_model = 0
@@ -138,7 +135,7 @@ class SpdController():
             v_curvature = np.sqrt(a_y_max / np.clip(np.abs(curv), 1e-4, None))
             model_speed = np.min(v_curvature)
             # Don't slow down below 20mph
-            model_speed = max(30.0 * CV.KPH_TO_MS, model_speed)
+            model_speed = max(25.0 * CV.KPH_TO_MS, model_speed)
 
             model_sum = curv[2] * 1000.  #np.sum( curv, 0 )
 
@@ -294,28 +291,13 @@ class SpdController():
         delta = int(round(set_speed)) - int(CS.VSetDis)
         dec_step_cmd = 1
 
-        if self.osm_spd_enable_map:
-          self.osm_spd_enable = int(Params().get("LimitSetSpeed", encoding='utf8')) == 1
-          self.osm_spd_enable_camera = int(Params().get("LimitSetSpeedCamera", encoding='utf8')) == 1
-        elif not self.osm_spd_enable_map:
-          camspeed = Params().get("LimitSetSpeedCamera", encoding="utf8")
-          if camspeed is not None:
-            self.map_spd_camera = int(float(camspeed.rstrip('\n')))
-            self.map_spd_enable = self.map_spd_camera > 29
-          else:
-            self.map_spd_enable = False
-            self.map_spd_camera = 0
-          
+        self.osm_spd_enable = Params().get("LimitSetSpeed", encoding='utf8') == "1"
+        self.osm_spd_enable_camera = Params().get("LimitSetSpeedCamera", encoding='utf8') == "1"
         self.osm_spd_limit_offset = int(Params().get("OpkrSpeedLimitOffset", encoding='utf8'))
-
         if self.long_curv_timer < long_wait_cmd:
             pass
         elif delta > 0:
-            if ((self.map_spd_camera+self.osm_spd_limit_offset) == int(CS.VSetDis)) and self.map_spd_enable:
-                set_speed = int(CS.VSetDis) + 0
-                btn_type = Buttons.NONE
-                self.long_curv_timer = 0
-            elif (((int(round(CC.target_map_speed))+self.osm_spd_limit_offset) == int(CS.VSetDis)) or ((int(round(CC.target_map_speed_camera))+self.osm_spd_limit_offset) == int(CS.VSetDis))) and (self.osm_spd_enable or self.osm_spd_enable_camera) and self.osm_spd_enable_map:
+            if (((int(round(CC.target_map_speed))+self.osm_spd_limit_offset) == int(CS.VSetDis)) or ((int(round(CC.target_map_speed_camera))+self.osm_spd_limit_offset) == int(CS.VSetDis))) and (self.osm_spd_enable or self.osm_spd_enable_camera):
                 set_speed = int(CS.VSetDis) + 0
                 btn_type = Buttons.NONE
                 self.long_curv_timer = 0
@@ -372,4 +354,4 @@ class SpdController():
                     self.btn_type = Buttons.NONE          
                 else:
                     return 1
-        return  0  
+        return  0   
